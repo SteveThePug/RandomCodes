@@ -1,0 +1,60 @@
+using System;
+
+class MainClass {
+  public static void Main (string[] args) {
+    Console.WriteLine("State the initial \n x: \n y: \n dy/dx: \n No.Iterations:  \n Step: \n ");
+    double x0 = Convert.ToDouble(Console.ReadLine());
+    double y0 = Convert.ToDouble(Console.ReadLine());
+    double d0 = Convert.ToDouble(Console.ReadLine());
+    int n = Convert.ToUInt16(Console.ReadLine());
+    double h = Convert.ToDouble(Console.ReadLine());
+    Console.WriteLine(euler(x0,y0,d0,n,h));
+    Console.WriteLine("\n");
+    Console.WriteLine(eulerimproved(x0,y0,d0,n,h));
+  }
+
+  static double Derivative(double x,double y) { 
+    return (Math.Cos(x)*Math.Cos(x)*Math.Cos(x)*Math.Cos(x) - 2*y*Math.Sin(x))/Math.Cos(x);
+    // y=cos^2(x)(2+sin(x)
+  }
+
+  static double NextY(double y, double d, double h) {
+    return y+h*d;
+  }
+
+  static string eulerimproved(double x0,double y0,double d0, int n, double h){
+    double[] x = new double[n+1];
+    double[] y = new double[n+1];
+    double[] d = new double[n+1];
+    x[0] = x0;
+    y[0] = y0;
+    d[0] = d0;
+    string output = ("(" + x[0] + "," + y[0] + "),");
+    for (int i=0;i<n;i++) {
+      x[i+1] = x[i] + h;
+      double ytemp = NextY(y[i],d[i],h/2);
+      double xtemp = x[i] + (h/2);
+      double dtemp = Derivative(xtemp, ytemp);
+      y[i+1] = Math.Round(y[i] + (h*dtemp), 5, MidpointRounding.ToEven);
+      output += "(" + x[i+1] + "," + y[i+1] + "),";
+    }
+    return output;
+  }
+  
+  static string euler(double x0,double y0,double d0, int n, double h){
+    double[] x = new double[n+1];
+    double[] y = new double[n+1];
+    double[] d = new double[n+1];
+    x[0] = x0;
+    y[0] = y0;
+    d[0] = d0;
+    string output = ("(" + x[0] + "," + y[0] + "),");
+    for (int i=0;i<n;i++) {
+      y[i+1] = Math.Round(NextY(y[i],d[i],h), 5, MidpointRounding.ToEven);
+      x[i+1] = x[i]+h;
+      d[i+1] = Derivative(x[i+1],y[i+1]);
+      output += ("(" + x[i+1] + "," + y[i+1] + "),");
+    }
+    return output;
+  }
+}
