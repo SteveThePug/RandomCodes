@@ -3,6 +3,8 @@ local sides = require("sides")
 local rs = component.redstone
 local inventory = component.inventory_controller
 
+test
+
 local slot = 1
 local amount = inventory.getStackInInternalSlot(slot)
 if amount then
